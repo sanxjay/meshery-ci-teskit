@@ -1,41 +1,35 @@
-import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useUIStore } from '../store/uiStore';
+import { Switch, FormControlLabel, Select, MenuItem, Typography, Box } from '@mui/material';
 
-const Settings = () => {
-  const [darkMode, setDarkMode] = useState(() => {
-    const savedMode = localStorage.getItem('darkMode');
-    return savedMode === 'true' ? true : false;
-  });
+function Settings() {
+  const { t, i18n } = useTranslation();
+  const { isDarkMode, toggleDarkMode } = useUIStore();
 
-  useEffect(() => {
-    if (darkMode) {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
-    localStorage.setItem('darkMode', String(darkMode));
-  }, [darkMode]);
-
-  const toggleDarkMode = () => {
-    setDarkMode(!darkMode);
+  const handleLanguageChange = (event) => {
+    i18n.changeLanguage(event.target.value);
   };
 
   return (
-    <div>
-      <h1 className="text-3xl text-gray-800 dark:text-white">Settings</h1>
-      <div className="mt-5">
-        <label className="relative inline-flex items-center cursor-pointer">
-          <input
-            type="checkbox"
-            checked={darkMode}
-            onChange={toggleDarkMode}
-            className="sr-only peer"
-          />
-          <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
-          <span className="ml-3 text-sm font-medium text-gray-900 dark:text-gray-300">Dark Mode</span>
-        </label>
-      </div>
-    </div>
+    <Box>
+      <Typography variant="h4" gutterBottom>
+        {t('settingsTitle')}
+      </Typography>
+      <FormControlLabel
+        control={<Switch checked={isDarkMode} onChange={toggleDarkMode} />}
+        label="Dark Theme"
+      />
+      <Box sx={{ mt: 2 }}>
+        <Typography variant="h6">{t('language')}</Typography>
+        <Select value={i18n.language} onChange={handleLanguageChange}>
+          <MenuItem value="en">English</MenuItem>
+          <MenuItem value="es">Español</MenuItem>
+          <MenuItem value="fr">Français</MenuItem>
+          <MenuItem value="de">Deutsch</MenuItem>
+        </Select>
+      </Box>
+    </Box>
   );
-};
+}
 
 export default Settings;

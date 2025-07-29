@@ -1,6 +1,6 @@
 # Meshery CI TestKit: Automated UI & Workflow Validation Suite
 
-This project is a simulation of Meshery’s dashboard frontend and its CI testing environment.
+This project is a simulation of Meshery’s dashboard frontend and its CI testing environment. The dashboard frontend could be modified in future. 
 
 ## Tech Stack
 
@@ -11,7 +11,7 @@ This project is a simulation of Meshery’s dashboard frontend and its CI testin
 
 ## Getting Started
 
-1. Clone the repository
+1. Clone the repository `git clone https://github.com/sanjay/meshery-ci-testkit`
 2. Install all the dependencies: `npm install`
 3. Run the development server: `npm run dev`
 4. Run the tests: `npm run test:e2e`

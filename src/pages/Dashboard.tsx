@@ -1,34 +1,52 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { Button, Typography, Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
 import Modal from '../components/Modal';
 
 const Dashboard = () => {
+  const { t } = useTranslation();
   const [deployments, setDeployments] = useState([
-    { name: 'Mesh-1', version: 'v1.0' },
-    { name: 'Mesh-2', version: 'v1.2' },
+    { name: 'Mesh-1', version: 'v1.0', status: 'Running' },
+    { name: 'Mesh-2', version: 'v1.2', status: 'Stopped' },
   ]);
   const [isModalOpen, setModalOpen] = useState(false);
 
-  const addDeployment = (deployment: { name: string; version: string }) => {
-    console.log('Adding deployment:', deployment);
-    setDeployments([...deployments, deployment]);
+  const addDeployment = (deployment) => {
+    setDeployments([...deployments, { ...deployment, status: 'Running' }]);
   };
 
   return (
-    <div>
-      <h1 className="text-3xl text-gray-800 dark:text-white">Dashboard</h1>
-      <button onClick={() => setModalOpen(true)} data-testid="add-deployment-button" className="mt-5 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+    <Box>
+      <Typography variant="h4" gutterBottom sx={{ textAlign: 'center', fontWeight: 'bold' }}>
+        {t('dashboardTitle')}
+      </Typography>
+      <Button variant="contained" onClick={() => setModalOpen(true)} data-testid="add-deployment-button">
         Add Deployment
-      </button>
-      <div className="mt-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-        {deployments.map((deployment, index) => (
-          <div key={index} className="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-5">
-            <h2 className="text-xl font-bold text-gray-800 dark:text-white">{deployment.name}</h2>
-            <p className="text-gray-600 dark:text-gray-400">{deployment.version}</p>
-          </div>
-        ))}
-      </div>
-      <Modal isOpen={isModalOpen} onClose={() => setModalOpen(false)} onAddDeployment={addDeployment} />
-    </div>
+      </Button>
+      <TableContainer component={Paper} sx={{ mt: 2 }}>
+        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+          <TableHead>
+            <TableRow>
+              <TableCell sx={{ fontWeight: 'bold' }}>Name</TableCell>
+              <TableCell sx={{ fontWeight: 'bold' }}>Version</TableCell>
+              <TableCell sx={{ fontWeight: 'bold' }}>Status</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {deployments.map((row) => (
+              <TableRow key={row.name}>
+                <TableCell component="th" scope="row">
+                  {row.name}
+                </TableCell>
+                <TableCell>{row.version}</TableCell>
+                <TableCell>{row.status}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+      <Modal isOpen={isModalOpen} onClose={() => setModalOpen(false)} onAddDeployment={addDeployment} deployments={deployments} />
+    </Box>
   );
 };
 
