@@ -1,6 +1,6 @@
 # Meshery CI TestKit: Automated UI & Workflow Validation Suite
 
-This project is a simulation of Meshery’s dashboard frontend and its CI testing environment. The dashboard frontend could be modified in future. 
+This project is a simulation of Meshery’s dashboard frontend and its CI testing environment. Provides continous integration on this project itself. 
 
 ## Tech Stack
 
