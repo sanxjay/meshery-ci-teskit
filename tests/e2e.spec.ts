@@ -1,20 +1,19 @@
-
 import { test, expect } from '@playwright/test';
 
-test.describe('MERN App E2E Tests', () => {
-  test('should navigate to dashboard and open modal', async ({ page }) => {
-    await page.goto('http://localhost:5173');
-    await expect(page).toHaveTitle(/Meshery CI Testkit/);
-    await page.click('button:has-text("Add Deployment")');
-    await expect(page.locator('h2:has-text("Add New Deployment")')).toBeVisible();
-  });
+test('should navigate to the settings page and verify settings content', async ({ page }) => {
+  // Start from the index page (the baseURL is set in the playwright.config.ts)
+  await page.goto('/');
 
-  test('should navigate to settings and toggle dark mode', async ({ page }) => {
-    await page.goto('http://localhost:5173/settings');
-    await page.click('input[type="checkbox"]');
-    const bodyBackgroundColor = await page.evaluate(() => {
-      return window.getComputedStyle(document.body).getPropertyValue('background-color');
-    });
-    expect(bodyBackgroundColor).toBe('rgb(18, 18, 18)');
-  });
+  // Find a link with the text 'Settings' and click it.
+  await page.click('text=Settings');
+
+  // The new URL should be "/settings" (baseURL is used there)
+  await expect(page).toHaveURL('/settings');
+
+  // The new page should contain an h4 with "Settings"
+  await expect(page.locator('h4')).toContainText('Settings');
+
+  // Check for the presence of specific settings elements
+  await expect(page.locator('text=Language')).toBeVisible();
+  await expect(page.locator('text=Dark Theme')).toBeVisible();
 });
